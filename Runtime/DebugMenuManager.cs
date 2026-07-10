@@ -50,6 +50,10 @@ namespace DebugMenuKit
         public List<string> categoryOrder = new List<string> { "User" };
 
         private const int FINGER_COUNT_TO_ENABLE_DEBUG = 4;
+        private const float PANEL_RIGHT_EDGE_X = -156f;
+        private const float PANEL_GAP = 16f;
+        private const float PANEL_MAX_WIDTH = 480f;
+        private const float PANEL_EXTRA_WIDTH = 8f;
 
         private readonly List<DebugMenuEntry> customEntries = new List<DebugMenuEntry>();
         private List<DebugMenuEntry> entries = new List<DebugMenuEntry>();
@@ -320,7 +324,9 @@ namespace DebugMenuKit
         {
             for (int i = 0; i < buttonsMenu1.transform.childCount; i++)
             {
-                Destroy(buttonsMenu1.transform.GetChild(i).gameObject);
+                GameObject old = buttonsMenu1.transform.GetChild(i).gameObject;
+                old.SetActive(false); // Destroy is deferred; hide now so layout ignores it
+                Destroy(old);
             }
 
             var seenCategories = new HashSet<string>();
@@ -334,13 +340,17 @@ namespace DebugMenuKit
                     row.Init(category, () => OnMenu1Click(category));
                 }
             }
+
+            FitPanelsToContent();
         }
 
         private void OnMenu1Click(string category)
         {
             for (int i = 0; i < buttonsMenu2.transform.childCount; i++)
             {
-                Destroy(buttonsMenu2.transform.GetChild(i).gameObject);
+                GameObject old = buttonsMenu2.transform.GetChild(i).gameObject;
+                old.SetActive(false); // Destroy is deferred; hide now so layout ignores it
+                Destroy(old);
             }
 
             if (lastExtraMenu != null)
@@ -360,6 +370,31 @@ namespace DebugMenuKit
                     row.Init(entry.name, () => captured.Invoke());
                 }
             }
+
+            FitPanelsToContent();
+        }
+
+        // Each panel hugs its widest row (rows force-expand to match), then the two panels
+        // are re-anchored so they stay side by side left of the open button.
+        private void FitPanelsToContent()
+        {
+            FitPanelWidth(scroll1, buttonsMenu1);
+            FitPanelWidth(scroll2, buttonsMenu2);
+
+            RectTransform panel1 = (RectTransform)scroll1.transform;
+            panel1.anchoredPosition = new Vector2(PANEL_RIGHT_EDGE_X - panel1.rect.width, panel1.anchoredPosition.y);
+
+            RectTransform panel2 = (RectTransform)scroll2.transform;
+            panel2.anchoredPosition = new Vector2(
+                panel1.anchoredPosition.x - PANEL_GAP - panel2.rect.width, panel2.anchoredPosition.y);
+        }
+
+        private static void FitPanelWidth(GameObject scrollRoot, GameObject content)
+        {
+            RectTransform contentRect = (RectTransform)content.transform;
+            LayoutRebuilder.ForceRebuildLayoutImmediate(contentRect);
+            float width = Mathf.Min(contentRect.rect.width + PANEL_EXTRA_WIDTH, PANEL_MAX_WIDTH);
+            ((RectTransform)scrollRoot.transform).SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
         }
 
         private void ClearPlayerPrefs()

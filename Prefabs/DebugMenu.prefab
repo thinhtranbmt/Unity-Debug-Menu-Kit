@@ -55,8 +55,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2573729121f4bceb35d6ff3aef8d322, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debugRowPrefab: {fileID: 1224246184394240, guid: 544fd8fd44dd4b46a7d133bd79795c73,
-    type: 3}
+  debugRowPrefab: {fileID: 1224246184394240, guid: 544fd8fd44dd4b46a7d133bd79795c73, type: 3}
   btnOpenDebugMenu: {fileID: 114191679508530556}
   buttonsMenu1: {fileID: 1635236041033940}
   buttonsMenu2: {fileID: 1621948386885878}
@@ -69,6 +68,9 @@ MonoBehaviour:
   debugLogText: {fileID: 0}
   topLeft: {fileID: 224286486180122058}
   debugLogConsole: {fileID: 0}
+  hideOnStart: 0
+  categoryOrder:
+  - User
 --- !u!223 &7115561731071393717
 Canvas:
   m_ObjectHideFlags: 0
@@ -790,8 +792,8 @@ GameObject:
   m_Component:
   - component: {fileID: 224743076239655358}
   - component: {fileID: 222207699467183350}
-  - component: {fileID: 114137346648760016}
   - component: {fileID: 114672429449061226}
+  - component: {fileID: 237027887169020180}
   m_Layer: 5
   m_Name: Button2
   m_TagString: Untagged
@@ -813,9 +815,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 224641118430635112}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 1}
-  m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -74.5, y: 0.000030517578}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 2, y: 0}
   m_SizeDelta: {x: 150, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &222207699467183350
@@ -826,30 +828,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1621948386885878}
   m_CullTransparentMesh: 0
---- !u!114 &114137346648760016
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1621948386885878}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Padding:
-    m_Left: 0
-    m_Right: 0
-    m_Top: 0
-    m_Bottom: 0
-  m_ChildAlignment: 0
-  m_StartCorner: 0
-  m_StartAxis: 0
-  m_CellSize: {x: 150, y: 50}
-  m_Spacing: {x: 0, y: 0}
-  m_Constraint: 1
-  m_ConstraintCount: 1
 --- !u!114 &114672429449061226
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -862,8 +840,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_HorizontalFit: 0
+  m_HorizontalFit: 2
   m_VerticalFit: 2
+--- !u!114 &237027887169020180
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1621948386885878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.VerticalLayoutGroup
+  m_Padding:
+    m_Left: 4
+    m_Right: 4
+    m_Top: 4
+    m_Bottom: 4
+  m_ChildAlignment: 0
+  m_Spacing: 4
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 0
+  m_ChildControlWidth: 1
+  m_ChildControlHeight: 1
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
 --- !u!1 &1635236041033940
 GameObject:
   m_ObjectHideFlags: 0
@@ -874,8 +878,8 @@ GameObject:
   m_Component:
   - component: {fileID: 224117956914080972}
   - component: {fileID: 222793364518047382}
-  - component: {fileID: 114575776469653778}
   - component: {fileID: 114302799027205200}
+  - component: {fileID: 4793741722068359546}
   m_Layer: 5
   m_Name: Buttons1
   m_TagString: Untagged
@@ -897,9 +901,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 224819742804072058}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 1}
-  m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -50, y: 0.000015258789}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 2, y: 0}
   m_SizeDelta: {x: 100, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &222793364518047382
@@ -910,30 +914,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1635236041033940}
   m_CullTransparentMesh: 0
---- !u!114 &114575776469653778
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1635236041033940}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Padding:
-    m_Left: 0
-    m_Right: 0
-    m_Top: 0
-    m_Bottom: 0
-  m_ChildAlignment: 4
-  m_StartCorner: 0
-  m_StartAxis: 0
-  m_CellSize: {x: 150, y: 50}
-  m_Spacing: {x: 0, y: 0}
-  m_Constraint: 1
-  m_ConstraintCount: 1
 --- !u!114 &114302799027205200
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -946,8 +926,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_HorizontalFit: 0
+  m_HorizontalFit: 2
   m_VerticalFit: 2
+--- !u!114 &4793741722068359546
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1635236041033940}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.VerticalLayoutGroup
+  m_Padding:
+    m_Left: 4
+    m_Right: 4
+    m_Top: 4
+    m_Bottom: 4
+  m_ChildAlignment: 0
+  m_Spacing: 4
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 0
+  m_ChildControlWidth: 1
+  m_ChildControlHeight: 1
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
 --- !u!1 &1659576710655422
 GameObject:
   m_ObjectHideFlags: 0
