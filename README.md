@@ -91,6 +91,12 @@ public void ChangeLevel()
 }
 ```
 
+The built-in **Status → TestExtraView** button previews the extra-menu area: it shows the
+panel assigned to `testExtraViewPrefab` on the DebugMenuManager component, or a red 350×250
+dummy panel when unassigned. The shown panel is auto-fitted horizontally so it sits just
+left of the visible menu panels, whatever its width; its vertical position comes from the
+ExtraView anchor in the prefab (or a scene override on the instance).
+
 ## Options (on the DebugMenuManager component)
 
 - **`hideOnStart`** — ship with the button hidden; testers reveal it with a 4-finger tap.
@@ -118,3 +124,4 @@ Prefabs/
 ## License
 
 MIT — see `LICENSE`.
+

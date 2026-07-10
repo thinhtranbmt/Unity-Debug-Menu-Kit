@@ -48,12 +48,14 @@ namespace DebugMenuKit
         public bool hideOnStart = false;
         [Tooltip("Categories listed first, in this order; the rest follow alphabetically.")]
         public List<string> categoryOrder = new List<string> { "User" };
+        [Tooltip("Optional panel for the Status > TestExtraView button; unassigned shows a built-in red dummy panel.")]
+        public GameObject testExtraViewPrefab;
 
         private const int FINGER_COUNT_TO_ENABLE_DEBUG = 4;
-        private const float PANEL_RIGHT_EDGE_X = -156f;
-        private const float PANEL_GAP = 16f;
+        private const float PANEL_RIGHT_EDGE_X = -71f;
+        private const float PANEL_GAP = 1f;
         private const float PANEL_MAX_WIDTH = 480f;
-        private const float PANEL_EXTRA_WIDTH = 8f;
+        private const float PANEL_EXTRA_WIDTH = 0f;
 
         private readonly List<DebugMenuEntry> customEntries = new List<DebugMenuEntry>();
         private List<DebugMenuEntry> entries = new List<DebugMenuEntry>();
@@ -225,6 +227,7 @@ namespace DebugMenuKit
                 lastExtraMenu.SetActive(false);
             }
             lastExtraMenu = Instantiate(prefab, extraMenu.transform);
+            FitExtraMenuPosition();
             return lastExtraMenu;
         }
 
@@ -271,6 +274,40 @@ namespace DebugMenuKit
                 return;
             }
             debugLogConsole.SetActive(!debugLogConsole.activeSelf);
+        }
+
+        // Shows a panel in the extra-menu area so testers can eyeball whether the ExtraView
+        // placement collides with the two menu panels on the current device. Shows
+        // testExtraViewPrefab when assigned, otherwise a runtime-built red dummy panel.
+        [DebugMethod("Status", "TestExtraView")]
+        public void Status_TestExtraView()
+        {
+            if (testExtraViewPrefab != null)
+            {
+                ShowExtraMenu(testExtraViewPrefab);
+                return;
+            }
+
+            GameObject template = new GameObject("ExtraViewTestPanel", typeof(RectTransform), typeof(Image));
+            RectTransform panelRect = (RectTransform)template.transform;
+            panelRect.sizeDelta = new Vector2(350f, 250f);
+            template.GetComponent<Image>().color = new Color(0.9f, 0.2f, 0.2f, 0.85f);
+
+            GameObject labelGo = new GameObject("Label", typeof(RectTransform), typeof(Text));
+            labelGo.transform.SetParent(template.transform, false);
+            RectTransform labelRect = (RectTransform)labelGo.transform;
+            labelRect.anchorMin = Vector2.zero;
+            labelRect.anchorMax = Vector2.one;
+            labelRect.sizeDelta = Vector2.zero;
+            Text label = labelGo.GetComponent<Text>();
+            label.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            label.fontSize = 28;
+            label.alignment = TextAnchor.MiddleCenter;
+            label.color = Color.white;
+            label.text = "ExtraView test\n350 x 250";
+
+            ShowExtraMenu(template);
+            Destroy(template);
         }
 
         [DebugMethod("User", "ClearUserData")]
@@ -375,26 +412,68 @@ namespace DebugMenuKit
         }
 
         // Each panel hugs its widest row (rows force-expand to match), then the two panels
-        // are re-anchored so they stay side by side left of the open button.
+        // are re-anchored so they stay side by side left of the open button. The prefab's
+        // panels carry a localScale (1.5 in the original design), and scaling expands
+        // rightward from the (0,1) pivot — so positioning must use the SCALED width or the
+        // panels overlap each other.
         private void FitPanelsToContent()
         {
             FitPanelWidth(scroll1, buttonsMenu1);
             FitPanelWidth(scroll2, buttonsMenu2);
 
             RectTransform panel1 = (RectTransform)scroll1.transform;
-            panel1.anchoredPosition = new Vector2(PANEL_RIGHT_EDGE_X - panel1.rect.width, panel1.anchoredPosition.y);
+            float scaledWidth1 = panel1.rect.width * panel1.localScale.x;
+            panel1.anchoredPosition = new Vector2(PANEL_RIGHT_EDGE_X - scaledWidth1, panel1.anchoredPosition.y);
 
             RectTransform panel2 = (RectTransform)scroll2.transform;
+            float scaledWidth2 = panel2.rect.width * panel2.localScale.x;
             panel2.anchoredPosition = new Vector2(
-                panel1.anchoredPosition.x - PANEL_GAP - panel2.rect.width, panel2.anchoredPosition.y);
+                panel1.anchoredPosition.x - PANEL_GAP - scaledWidth2, panel2.anchoredPosition.y);
+
+            FitExtraMenuPosition();
+        }
+
+        // The ExtraView marker has a fixed prefab position and shown panels can be any size
+        // (they overflow the marker), so a wide level-2 panel would cover them. Measure the
+        // shown panel's world bounds and shift the marker so the panel sits left of the
+        // visible menu panels with the same gap they keep between each other.
+        private void FitExtraMenuPosition()
+        {
+            if (!extraMenu.activeSelf || lastExtraMenu == null || !lastExtraMenu.activeInHierarchy)
+            {
+                return;
+            }
+
+            GameObject reference = scroll2.activeSelf ? scroll2 : scroll1.activeSelf ? scroll1 : null;
+            if (reference == null)
+            {
+                return;
+            }
+
+            RectTransform content = (RectTransform)lastExtraMenu.transform;
+            LayoutRebuilder.ForceRebuildLayoutImmediate(content);
+
+            RectTransform referenceRect = (RectTransform)reference.transform;
+            Vector3[] corners = new Vector3[4];
+            referenceRect.GetWorldCorners(corners);
+            float panelLeftEdge = corners[0].x;
+
+            content.GetWorldCorners(corners);
+            float contentRightEdge = corners[2].x;
+
+            float worldGap = PANEL_GAP * referenceRect.parent.lossyScale.x;
+            float shift = panelLeftEdge - worldGap - contentRightEdge;
+            extraMenu.transform.position += new Vector3(shift, 0f, 0f);
         }
 
         private static void FitPanelWidth(GameObject scrollRoot, GameObject content)
         {
             RectTransform contentRect = (RectTransform)content.transform;
             LayoutRebuilder.ForceRebuildLayoutImmediate(contentRect);
-            float width = Mathf.Min(contentRect.rect.width + PANEL_EXTRA_WIDTH, PANEL_MAX_WIDTH);
-            ((RectTransform)scrollRoot.transform).SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
+            RectTransform panel = (RectTransform)scrollRoot.transform;
+            float maxLocalWidth = PANEL_MAX_WIDTH / Mathf.Max(0.01f, panel.localScale.x);
+            float width = Mathf.Min(contentRect.rect.width + PANEL_EXTRA_WIDTH, maxLocalWidth);
+            panel.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
         }
 
         private void ClearPlayerPrefs()

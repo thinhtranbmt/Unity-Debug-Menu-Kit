@@ -1,6 +1,6 @@
 {
     "name": "com.thinhtranbmt.debug-menu-kit",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "displayName": "Debug Menu Kit",
     "description": "In-game two-level debug/cheat menu for Unity, driven by [DebugMethod] attributes. Drop the prefab in your boot scene, add your own MonoBehaviour with attributed methods (or AddButton at runtime) and every cheat shows up automatically. FPS counter, version display, clear-user-data, 4-finger-tap / F1 toggle. Zero third-party dependencies.",
     "unity": "2021.3",

@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.1.0] - 2026-07-10
+
+### Fixed
+- Extra-menu panels no longer overlap the second-level menu panel: the ExtraView marker is
+  now auto-fitted horizontally (like the two menu panels) so the shown panel — whatever its
+  width — sits just left of the visible panels with the standard gap.
+- Panel auto-size now accounts for the panels' `localScale` (1.5 in the prefab): widths and
+  positions are computed on the scaled size, and the max-width clamp is applied in scaled
+  units. Previously wide content made the two panels overlap each other.
+
+### Changed
+- Tightened the default layout: panels sit flush against the open button and each other
+  (`PANEL_RIGHT_EDGE_X` -156 → -71, `PANEL_GAP` 16 → 1, `PANEL_EXTRA_WIDTH` 8 → 0), and the
+  row paddings in the prefab were trimmed to match.
+
+### Added
+- Built-in **Status → TestExtraView** button: previews the extra-menu area so testers can
+  verify on-device where custom panels land relative to the two menu panels. Shows the
+  panel assigned to the new `testExtraViewPrefab` field, or a runtime-built red 350×250
+  dummy panel when unassigned.
+
 ## [1.0.0] - 2026-07-10
 
 Initial release — the in-game debug menu extracted from an in-production match-3 game
