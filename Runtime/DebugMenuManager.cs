@@ -6,7 +6,11 @@ using System.Reflection;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
+#else
 using Input = UnityEngine.Input;
+#endif
 
 namespace DebugMenuKit
 {
@@ -104,6 +108,42 @@ namespace DebugMenuKit
                 fpsText.text = "FPS:" + Mathf.FloorToInt(1.0f / deltaTime);
             }
 
+            HandleToggleInput();
+        }
+
+        // Works with either Active Input Handling setting: the new Input System package
+        // (ENABLE_INPUT_SYSTEM) or the legacy Input Manager.
+        private void HandleToggleInput()
+        {
+#if ENABLE_INPUT_SYSTEM
+            Touchscreen touchscreen = Touchscreen.current;
+            if (touchscreen != null)
+            {
+                int fingers = 0;
+                bool releasedThisFrame = false;
+                var touches = touchscreen.touches;
+                for (int i = 0; i < touches.Count; i++)
+                {
+                    bool released = touches[i].press.wasReleasedThisFrame;
+                    if (touches[i].press.isPressed || released)
+                    {
+                        fingers++;
+                    }
+                    releasedThisFrame |= released;
+                }
+                if (releasedThisFrame && fingers == FINGER_COUNT_TO_ENABLE_DEBUG)
+                {
+                    ToggleDebugMenu();
+                }
+            }
+
+            if ((Application.isEditor || Debug.isDebugBuild)
+                && Keyboard.current != null && Keyboard.current.f1Key.wasReleasedThisFrame
+                && !scroll2.activeSelf)
+            {
+                ToggleDebugMenu();
+            }
+#else
             for (int i = 0; i < Input.touchCount; i++)
             {
                 Touch touch = Input.GetTouch(i);
@@ -119,6 +159,7 @@ namespace DebugMenuKit
             {
                 ToggleDebugMenu();
             }
+#endif
         }
 
         /// <summary>
