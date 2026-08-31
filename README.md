@@ -35,7 +35,7 @@ https://github.com/thinhtranbmt/Unity-Debug-Menu-Kit.git
 Or in `Packages/manifest.json`:
 
 ```json
-"com.thinhtranbmt.debug-menu-kit": "https://github.com/thinhtranbmt/Unity-Debug-Menu-Kit.git"
+"com.mycore.debugmenukit": "https://github.com/thinhtranbmt/Unity-Debug-Menu-Kit.git"
 ```
 
 Requires Unity 2021.3+, TextMeshPro, and an `EventSystem` in the scene (any uGUI game has

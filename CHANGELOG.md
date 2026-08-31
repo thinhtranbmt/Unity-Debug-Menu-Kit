@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.0.0] - 2026-08-31
+
+### Changed
+- **Breaking:** package id renamed `com.thinhtranbmt.debug-menu-kit` -> `com.mycore.debugmenukit`, aligning this kit with the rest of
+  the MyCore kit family. Update the entry in `Packages/manifest.json` — Unity treats the new
+  id as a different package, so remove the old entry rather than editing around it. No API,
+  namespace, or assembly-definition names changed.
+
 ## [1.1.0] - 2026-07-10
 
 ### Fixed
