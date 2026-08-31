@@ -39,7 +39,9 @@ Or in `Packages/manifest.json`:
 ```
 
 Requires Unity 2021.3+, TextMeshPro, and an `EventSystem` in the scene (any uGUI game has
-one). Uses the legacy Input Manager for the toggle gestures.
+one). The toggle gestures compile against whichever input backend the project uses: the Input
+System when `ENABLE_INPUT_SYSTEM` is defined, the legacy Input Manager otherwise.
+`com.unity.inputsystem` is declared as a dependency because the runtime assembly references it.
 
 ## Quick start
 

@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.1.0] - 2026-08-31
+### Fixed
+- Declare `com.unity.inputsystem` in `package.json`. `DebugMenuKit.Runtime` references the
+  `Unity.InputSystem` assembly unconditionally, so a project without the Input System package
+  failed to compile on a fresh install.
+
+### Changed
+- README no longer claims the toggle gestures use the legacy Input Manager only; the code
+  has had an `ENABLE_INPUT_SYSTEM` branch for both backends.
+
 ## [2.0.0] - 2026-08-31
 
 ### Changed
